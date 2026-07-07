@@ -1,0 +1,70 @@
+# ─── secrets / credentials ───────────────────────────────
+# Never commit real API keys, broker credentials, or tokens.
+.env
+.env.*
+# ...but DO keep the example/template files so others can bootstrap:
+!*.example
+!.env.example
+!.env.*.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials.json
+secrets.json
+secrets.yaml
+service-account*.json
+
+# ─── python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+*-venv/
+.service-venv/
+
+# ─── databases ───────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+tradebot.db
+
+# ─── node / next ─────────────────────────────────────────
+node_modules/
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── logs / runtime ──────────────────────────────────────
+logs/
+*.log
+*.pid
+
+# ─── editor / os ─────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ─── claude code (local machine config) ──────────────────
+.claude/settings.local.json

@@ -1,0 +1,106 @@
+# Tradebot dev stack.
+#
+# Services:
+#   db        — PostgreSQL 16, persistent volume
+#   redis     — Redis 7, persistent volume
+#   backend   — FastAPI API (uvicorn) + embedded APScheduler
+#   worker    — OPTIONAL standalone scheduler. Disabled by default to avoid duplicate
+#               scans (the backend already runs the scheduler in its lifespan).
+#               Enable via `docker compose --profile worker up` once you split them.
+#   frontend  — Next.js 14
+#
+# Quick start:
+#   cp backend/.env.example backend/.env
+#   cp frontend/.env.example frontend/.env.local
+#   docker compose up --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tradebot
+      POSTGRES_PASSWORD: tradebot
+      POSTGRES_DB: tradebot
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"          # exposed for local psql; remove in prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tradebot -d tradebot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"          # exposed for local debugging; remove in prod
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/docker/backend.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../backend/.env
+    environment:
+      # Override host references inside the docker network.
+      DATABASE_URL: postgresql+asyncpg://tradebot:tradebot@db:5432/tradebot
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    # Tip: for hot-reload dev, mount the source and switch CMD to `--reload`:
+    #   volumes: [../backend/app:/app/app:ro]
+    #   command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/backend.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://tradebot:tradebot@db:5432/tradebot
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["python", "-m", "app.workers.scheduler"]
+    profiles: ["worker"]      # opt-in: docker compose --profile worker up
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: infra/docker/frontend.Dockerfile
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8000
+      NEXT_PUBLIC_API_BASE: /api
+      NEXT_PUBLIC_WS_BASE: ws://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+volumes:
+  db-data:
+  redis-data:

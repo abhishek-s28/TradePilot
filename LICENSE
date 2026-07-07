@@ -1,0 +1,36 @@
+Copyright (c) 2026 Abhishek Shah. All Rights Reserved.
+
+This software and its associated source code, documentation, and other files
+(the "Software") are the proprietary and confidential property of the copyright
+holder. The Software is made available for viewing purposes only.
+
+NO LICENSE OR PERMISSION IS GRANTED. You may NOT, without the prior written
+permission of the copyright holder:
+
+  - use, run, or execute the Software, in whole or in part;
+  - copy, reproduce, or store the Software;
+  - modify, adapt, translate, or create derivative works of the Software;
+  - distribute, publish, sublicense, sell, rent, lease, or otherwise transfer
+    the Software; or
+  - remove or alter this notice.
+
+Viewing this repository on a public hosting platform (e.g., GitHub) does not
+grant any of the rights above. Any platform-level features (such as forking)
+permitted by the hosting provider's Terms of Service do not constitute a grant
+of a license by the copyright holder.
+
+------------------------------------------------------------------------------
+DISCLAIMER OF WARRANTY AND LIABILITY
+------------------------------------------------------------------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+THE SOFTWARE IS NOT FINANCIAL, INVESTMENT, OR TRADING ADVICE. It automates the
+placing of financial orders and can cause partial or total loss of capital.
+Any person who runs it does so entirely at their own risk.
+
+For licensing inquiries, contact the copyright holder.
